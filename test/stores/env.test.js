@@ -8,6 +8,7 @@
 var nconf = require('../../lib/nconf');
 
 process.env.DEEP__NESTED__VALUE = 'foo';
+process.env.DEEP2__NESTED__VALUE = 'bar';
 
 describe('nconf/stores/env, An instance of nconf.Env', () => {
   it("should have the correct methods defined", () => {
@@ -33,5 +34,18 @@ describe('nconf/stores/env, An instance of nconf.Env', () => {
 
     expect(env.accessSeparator).toBe('.');
     expect(env.get('DEEP.NESTED.VALUE')).toBe('foo');
-  })
+  });
+  it("should filter and strip prefix from environment variables", () => {
+    var env = new nconf.Env({prefix: 'DEEP2__'});
+    env.loadSync();
+    expect(env.get('DEEP__NESTED__VALUE')).toBeUndefined();
+    expect(env.get('NESTED__VALUE')).toBe('bar');
+  });
+  it("should filter and strip prefix from environment variables with input and access separator", () => {
+    var env = new nconf.Env({prefix: 'DEEP2__', accessSeparator: '.', inputSeparator: '__' });
+    env.loadSync();
+    console.log(env);
+    expect(env.get('DEEP.NESTED.VALUE')).toBeUndefined();
+    expect(env.get('NESTED.VALUE')).toBe('bar');
+  });
 });
