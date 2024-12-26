@@ -44,7 +44,6 @@ describe('nconf/stores/env, An instance of nconf.Env', () => {
   it("should filter and strip prefix from environment variables with input and access separator", () => {
     var env = new nconf.Env({prefix: 'DEEP2__', accessSeparator: '.', inputSeparator: '__' });
     env.loadSync();
-    console.log(env);
     expect(env.get('DEEP.NESTED.VALUE')).toBeUndefined();
     expect(env.get('NESTED.VALUE')).toBe('bar');
   });
